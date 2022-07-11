@@ -143,7 +143,10 @@ conf:
   sql-audit-dir: ""
 
   # CockroachDB's port to listen to inter-communications and client connections.
-  port: 26257
+  port:
+    number: 26257
+    # istio: prefix the port name with `tcp` to make istio work. f.e. `tcp-grpc`
+    name: grpc
 
   # CockroachDB's port to listen to HTTP requests.
   http-port: 8080
@@ -269,12 +272,16 @@ service:
       external:
         port: 26257
         name: grpc
+        # istio: prefix the port name with `tcp` to make istio work. f.e. `tcp-grpc`
+        targetPort: grpc
       # If the port number is different than `external.port`, then it will be
       # named as `internal.name` in Service.
       internal:
         port: 26257
-        # If using Istio set it to `cockroach`.
+        # If using Istio set it to `tcp-grpc`.
         name: grpc-internal
+        # istio: prefix the port name with `tcp` to make istio work. f.e. `tcp-grpc`
+        targetPort: grpc-internal
     http:
       port: 8080
       name: http

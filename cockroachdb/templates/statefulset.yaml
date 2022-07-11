@@ -193,7 +193,7 @@ spec:
               --attrs={{ join `:` . }}
             {{- end }}
               --http-port={{ index .Values.conf `http-port` | int64 }}
-              --port={{ .Values.conf.port | int64 }}
+              --port={{ .Values.conf.port.number | int64 }}
               --cache={{ .Values.conf.cache }}
             {{- with index .Values.conf `max-disk-temp-storage` }}
               --max-disk-temp-storage={{ . }}
@@ -230,8 +230,8 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           ports:
-            - name: grpc
-              containerPort: {{ .Values.conf.port | int64 }}
+            - name: {{ .Values.conf.port.name }}
+              containerPort: {{ .Values.conf.port.number | int64 }}
               protocol: TCP
             - name: http
               containerPort: {{ index .Values.conf `http-port` | int64 }}
